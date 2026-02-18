@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova | Web Design & Strategy</title>
+    <!-- Simple, Clean Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg: #05070a;
+            --card-bg: rgba(17, 24, 39, 0.6);
+            --border: rgba(255, 255, 255, 0.08);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --success: #10b981;
+            --error: #ef4444;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            background-image: 
+                radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 100% 100%, rgba(192, 132, 252, 0.1) 0%, transparent 40%);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+        .hidden { display: none !important; }
+
+        /* Clean Navigation */
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            background: rgba(5, 7, 10, 0.75);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+        nav .container { display: flex; justify-content: space-between; align-items: center; height: 72px; }
+        .logo { 
+            font-size: 22px; font-weight: 800; letter-spacing: -1px; 
+            text-decoration: none; color: #fff; display: flex; align-items: center; gap: 8px;
+        }
+        .logo-dot { width: 8px; height: 8px; background: var(--primary); border-radius: 50%; box-shadow: 0 0 15px var(--primary); }
+
+        /* Main Hero Section */
+        .hero { padding: 160px 0 80px; text-align: center; }
+        .hero h1 { 
+            font-size: clamp(40px, 7vw, 70px); font-weight: 800; line-height: 1.1; 
+            letter-spacing: -2px; margin-bottom: 24px;
+            background: linear-gradient(to bottom, #fff 50%, #64748b);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .hero p { color: var(--text-muted); font-size: 18px; max-width: 600px; margin: 0 auto 40px; }
+
+        /* Service Cards */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 40px; border-radius: 24px;
+            transition: all 0.4s ease;
+            cursor: pointer; position: relative;
+        }
+        .card:hover {
+            border-color: var(--primary);
+            background: rgba(17, 24, 39, 0.9);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
+        }
+        .card h3 { font-size: 22px; margin-bottom: 12px; font-weight: 700; color: #fff; }
+        .card p { color: var(--text-muted); font-size: 15px; margin-bottom: 32px; }
+        .card .price { font-size: 28px; font-weight: 800; color: #fff; }
+
+        /* Order Form */
+        .order-section { padding: 100px 0; display: flex; justify-content: center; }
+        .form-container {
+            width: 100%; max-width: 580px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 40px; border-radius: 32px;
+            backdrop-filter: blur(30px);
+        }
+        .security-badge {
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            color: var(--success);
+            padding: 10px; border-radius: 12px;
+            font-size: 11px; font-weight: 700; text-align: center;
+            margin-bottom: 30px; letter-spacing: 1px; text-transform: uppercase;
+        }
+
+        .form-group { margin-bottom: 24px; }
+        label { display: block; font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; }
+        input, select, textarea {
+            width: 100%; background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border); border-radius: 12px;
+            padding: 14px 16px; color: #fff; font-family: inherit;
+            font-size: 16px; transition: 0.2s;
+        }
+        input:focus { outline: none; border-color: var(--primary); background: rgba(255, 255, 255, 0.05); }
+
+        .payment-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
+        .pay-btn {
+            padding: 12px; border: 1px solid var(--border); background: rgba(255,255,255,0.02);
+            color: var(--text-muted); border-radius: 10px; cursor: pointer;
+            font-size: 14px; font-weight: 600; transition: 0.2s;
+        }
+        .pay-btn.active { border-color: var(--primary); color: #fff; background: rgba(99, 102, 241, 0.2); }
+
+        .calc-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 16px; padding: 24px; margin: 30px 0;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .calc-label { font-size: 15px; color: var(--text-muted); font-weight: 600; }
+        .calc-value { font-size: 32px; font-weight: 800; color: var(--primary); }
+
+        .submit-btn {
+            width: 100%; padding: 18px; border-radius: 14px;
+            background: var(--primary); color: #fff;
+            border: none; font-size: 16px; font-weight: 700;
+            cursor: pointer; transition: 0.3s;
+        }
+        .submit-btn:hover { background: var(--primary-hover); }
+        .submit-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        .success-card { text-align: center; padding: 60px 0; }
+        .success-icon { 
+            width: 80px; height: 80px; background: rgba(16, 185, 129, 0.1); 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 24px; color: var(--success); font-size: 32px;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="container">
+            <a href="#" class="logo" onclick="location.reload()">
+                <div class="logo-dot"></div> NOVA
+            </a>
+            <button class="pay-btn" style="border-color: var(--primary); color: #fff; padding: 6px 20px; font-size: 13px;" onclick="showView('order')">Order Now</button>
+        </div>
+    </nav>
+
+    <main id="view-landing" class="container">
+        <section class="hero">
+            <h1>Build your brand <br> the right way.</h1>
+            <p>We build powerful websites and design professional presentations for business owners and students.</p>
+        </section>
+
+        <div class="grid">
+            <div class="card" onclick="selectItem('Fullstack Web')">
+                <p>Websites</p>
+                <h3>Business Website</h3>
+                <p>A fast, modern website that works perfectly on phones and computers.</p>
+                <div class="price">₹2,999</div>
+            </div>
+            <div class="card" onclick="selectItem('Strategic Deck')">
+                <p>Planning</p>
+                <h3>Presentation Deck</h3>
+                <p>Beautiful slides that help you explain your ideas to investors or teachers.</p>
+                <div class="price">₹1,499</div>
+            </div>
+            <div class="card" onclick="selectItem('Brand Identity')">
+                <p>Design</p>
+                <h3>Brand Package</h3>
+                <p>A complete set of logos and colors that make your project look great.</p>
+                <div class="price">₹999</div>
+            </div>
+        </div>
+    </main>
+
+    <section id="view-order" class="container hidden order-section">
+        <div class="form-container">
+            <div class="security-badge">
+                Your Secure Order Form
+            </div>
+
+            <div class="form-group">
+                <label>Your Name</label>
+                <input type="text" id="in-name" placeholder="Enter your full name">
+            </div>
+
+            <div class="form-group">
+                <label>Your Country</label>
+                <input type="text" id="in-country" placeholder="e.g. India, USA" oninput="updatePricing()">
+            </div>
+
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="tel" id="in-phone" placeholder="Enter your phone number">
+            </div>
+
+            <div class="form-group">
+                <label>Choose a Service</label>
+                <select id="in-service" onchange="updatePricing()">
+                    <option value="Fullstack Web">Business Website</option>
+                    <option value="Strategic Deck">Presentation Deck</option>
+                    <option value="Brand Identity">Brand Package</option>
+                </select>
+            </div>
+
+            <div class="calc-box">
+                <div class="calc-label">Total Price:</div>
+                <div class="calc-value" id="val-price">₹0</div>
+            </div>
+
+            <div class="form-group">
+                <label>Project Topic</label>
+                <textarea id="in-topic" rows="3" placeholder="Tell us a little bit about your project..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Payment Method</label>
+                <div class="payment-grid">
+                    <button class="pay-btn" onclick="setPay('UPI', this)">UPI</button>
+                    <button class="pay-btn" onclick="setPay('GPay', this)">Google Pay</button>
+                    <button class="pay-btn" onclick="setPay('Card', this)">Credit Card</button>
+                    <button class="pay-btn" onclick="setPay('Wire', this)">Bank Transfer</button>
+                </div>
+            </div>
+
+            <button class="submit-btn" id="btn-submit" onclick="submitOrder()">
+                Submit Your Order
+            </button>
+            <p id="msg-feedback" style="text-align: center; margin-top: 20px; font-size: 13px; color: var(--text-muted);"></p>
+        </div>
+    </section>
+
+    <section id="view-success" class="container hidden" style="padding: 160px 0;">
+        <div class="success-card">
+            <div class="success-icon">✓</div>
+            <h2 style="font-size: 32px; margin-bottom: 16px; font-weight: 800;">Order Received!</h2>
+            <p style="color: var(--text-muted); max-width: 440px; margin: 0 auto 40px; font-size: 17px;">Thank you for your order. Our team will contact you very soon to start working.</p>
+            <button class="pay-btn" style="padding: 14px 40px; border-color: var(--primary); color: #fff;" onclick="location.reload()">Return to Home</button>
+        </div>
+    </section>
+
+    <script>
+        // THE UPDATED NEW URL
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbxTb2874-jvdz-A-sgAeYdweX5gMCIPVk1RiZxyOGH-tdc8cc_bp2cHZswLOk7LcvWx/exec"; 
+        
+        let state = {
+            service: "Fullstack Web",
+            payment: ""
+        };
+
+        const PRICING = {
+            "Fullstack Web": 2999,
+            "Strategic Deck": 1499,
+            "Brand Identity": 999
+        };
+
+        const REGIONS = {
+            "USA": { symbol: "$", rate: 0.012 },
+            "UK": { symbol: "£", rate: 0.0095 },
+            "EUROPE": { symbol: "€", rate: 0.011 },
+            "INDIA": { symbol: "₹", rate: 1 }
+        };
+
+        function showView(v) {
+            document.querySelectorAll('main, section').forEach(el => el.classList.add('hidden'));
+            document.getElementById('view-' + v).classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function selectItem(s) {
+            state.service = s;
+            document.getElementById('in-service').value = s;
+            showView('order');
+            updatePricing();
+        }
+
+        function setPay(m, btn) {
+            state.payment = m;
+            document.querySelectorAll('.pay-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        function updatePricing() {
+            const country = document.getElementById('in-country').value.toUpperCase();
+            const service = document.getElementById('in-service').value;
+            const priceEl = document.getElementById('val-price');
+            
+            let region = REGIONS["INDIA"];
+            if(country.includes("USA") || country.includes("STATES")) region = REGIONS["USA"];
+            else if(country.includes("UK") || country.includes("BRITAIN") || country.includes("KINGDOM")) region = REGIONS["UK"];
+            else if(country.includes("EURO") || country.includes("GERMANY") || country.includes("FRANCE")) region = REGIONS["EUROPE"];
+
+            const finalPrice = (PRICING[service] * region.rate).toLocaleString(undefined, {
+                minimumFractionDigits: region.rate === 1 ? 0 : 2
+            });
+
+            priceEl.textContent = `${region.symbol}${finalPrice}`;
+        }
+
+        async function submitOrder() {
+            const btn = document.getElementById('btn-submit');
+            const feedback = document.getElementById('msg-feedback');
+            
+            const name = document.getElementById('in-name').value.trim();
+            const phone = document.getElementById('in-phone').value.trim();
+            const country = document.getElementById('in-country').value.trim();
+            const service = document.getElementById('in-service').value;
+            const price = document.getElementById('val-price').textContent;
+            const topic = document.getElementById('in-topic').value.trim();
+            const payment = state.payment;
+
+            if(!name || !phone || !payment) {
+                feedback.style.color = "var(--error)";
+                feedback.textContent = "Please fill in all fields and choose a payment method.";
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = "Saving Order...";
+            feedback.style.color = "var(--text-muted)";
+            feedback.textContent = "Connecting to server...";
+
+            try {
+                // Using URLSearchParams with GET is the most reliable way to avoid CORS issues with Apps Script
+                const params = new URLSearchParams({
+                    name: name,
+                    phone: phone,
+                    country: country,
+                    service: service,
+                    price: price,
+                    topic: topic,
+                    payment: payment,
+                    timestamp: new Date().toISOString()
+                });
+
+                // Sending via GET
+                await fetch(`${GAS_URL}?${params.toString()}`, {
+                    method: 'GET',
+                    mode: 'no-cors'
+                });
+
+                // Since 'no-cors' doesn't return a readable response, we trigger the success view
+                showView('success');
+            } catch (e) {
+                console.error("Submission error:", e);
+                btn.disabled = false;
+                btn.textContent = "Submit Order";
+                feedback.style.color = "var(--error)";
+                feedback.textContent = "Network error. Please check your internet and try again.";
+            }
+        }
+
+        window.onload = () => {
+            updatePricing();
+        };
+    </script>
+</body>
+</html>
